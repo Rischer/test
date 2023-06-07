@@ -8,7 +8,11 @@
   </div>
 </template>
 <script>
+import Vue from 'vue'
+import Vant from 'vant'
+import 'vant/lib/index.css'
 import tabbar from '@/components/Tabbar'
+Vue.use(Vant)
 export default {
   data () {
     return {

@@ -1,5 +1,13 @@
 <template>
     <div>
+        <van-nav-bar title="影院">
+          <template #left>
+            上海<van-icon name="arrow-down" color="#000"/>
+          </template>
+          <template #right>
+            <van-icon name="search" size="22" color="#000"/>
+          </template>
+        </van-nav-bar>
         <div class="box">
             <ul>
                 <li v-for="data in cinemaList" :key="data.cinemaId">
@@ -67,7 +75,7 @@ li{
 }
 .box{
     overflow: hidden;
-    height: calc(100vh - 50px);
+    height: calc(100vh - 100px);
     position: relative;
     // 修正滚动条的位置
 }

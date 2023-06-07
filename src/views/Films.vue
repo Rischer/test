@@ -21,7 +21,7 @@ export default {
     }
   },
   mounted () {
-    axios.get('/banner.json').then(res => {
+    axios.get(process.env.BASE_URL + 'banner.json').then(res => {
       console.log(res.data)
       this.datalist = res.data.banner
     })
@@ -43,5 +43,6 @@ export default {
   position: sticky;
   top: 0;
   background: white;
+  z-index: 100;
 }
 </style>

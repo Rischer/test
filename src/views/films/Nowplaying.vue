@@ -1,7 +1,13 @@
 <template>
   <div>
-    <ul>
-      <li v-for="data in datalist" :key="data.filmId" @click="handleChangePage(data.filmId)">
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="我是有底线的"
+      @load="onLoad"
+      :immediate-check="false"
+    >
+      <van-cell v-for="data in datalist" :key="data.filmId" @click="handleChangePage(data.filmId)">
         <img :src="data.poster" />
         <div>
           <div class="title">{{ data.name }}</div>
@@ -13,8 +19,8 @@
             </div>
           </div>
         </div>
-      </li>
-    </ul>
+      </van-cell>
+    </van-list>
   </div>
 </template>
 <script>
@@ -29,7 +35,11 @@ Vue.filter('actorsFilter', (data) => {
 export default {
   data () {
     return {
-      datalist: []
+      datalist: [],
+      loading: false,
+      finished: false,
+      current: 1,
+      total: 0
     }
   },
   mounted () {
@@ -42,9 +52,33 @@ export default {
     }).then((res) => {
       console.log(res.data.data.films)
       this.datalist = res.data.data.films
+
+      this.total = res.data.data.total
     })
   },
   methods: {
+    onLoad () {
+      // 总长度 匹配, 禁用懒加载
+      // console.log('到底了')
+      if (this.datalist.length === this.total && this.total !== 0) {
+        this.finished = true
+        return
+      }
+
+      this.current++
+      http({
+        url: `/gateway?cityId=310100&pageNum=${this.current}&pageSize=10&type=1&k=9316576`,
+        headers: {
+          'X-Host': 'mall.film-ticket.film.list'
+        }
+      }).then((res) => {
+        // console.log(res.data.data.films)
+        this.datalist = [...this.datalist, ...res.data.data.films]
+
+        // loading主动设置成false
+        this.loading = false
+      })
+    },
     handleChangePage (id) {
       // 编程式导航
       // location.href = '#/detail'
@@ -65,8 +99,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-ul{
-  li{
+.van-list{
+  .van-cell{
     overflow: hidden;
     padding: 15px;
     img{

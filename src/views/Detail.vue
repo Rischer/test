@@ -58,7 +58,9 @@
           <detail-swiper-item v-for="(data,index) in filmInfo.photos" :key="index">
             <div :style="{
               backgroundImage: 'url(' + data + ')',
-            }" class="avatar" ></div>
+            }" class="avatar"
+            @click="handlePreview(index)"
+            ></div>
           </detail-swiper-item>
         </detail-swiper>
       </div>
@@ -73,6 +75,11 @@ import Vue from 'vue'
 import detailSwiper from '@/components/detail/DetailSwiper'
 import detailHeader from '@/components/detail/DetailHeader'
 import detailSwiperItem from '@/components/detail/DetailSwiperItem'
+
+import { ImagePreview } from 'vant'
+// ImagePreview(['https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg'])
+Vue.use(ImagePreview)
+
 Vue.filter('dateFilter', (date) => {
   return moment(date * 1000).format('YYYY-MM-DD')
 })
@@ -125,6 +132,14 @@ export default {
   methods: {
     handleBack () {
       this.$router.back()
+    },
+    handlePreview (index) {
+      ImagePreview({
+        images: this.filmInfo.photos,
+        startPosition: index,
+        closeable: true,
+        closeIconPosition: 'top-left'
+      })
     }
   }
   // mounted () {
