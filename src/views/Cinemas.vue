@@ -1,8 +1,8 @@
 <template>
     <div>
-        <van-nav-bar title="影院">
+        <van-nav-bar title="影院" @click-left="handleLeft" @click-right="handleRight">
           <template #left>
-            上海<van-icon name="arrow-down" color="#000"/>
+            {{$store.state.cityName}}<van-icon name="arrow-down" color="#000"/>
           </template>
           <template #right>
             <van-icon name="search" size="22" color="#000"/>
@@ -10,7 +10,7 @@
         </van-nav-bar>
         <div class="box">
             <ul>
-                <li v-for="data in cinemaList" :key="data.cinemaId">
+                <li v-for="data in $store.state.cinemaList" :key="data.cinemaId">
                     <div class="left">
                         <div class="cinema_name">{{data.name}}</div>
                         <div class="cinema_text">{{data.address}}</div>
@@ -24,7 +24,7 @@
     </div>
 </template>
 <script>
-import http from '@/util/http'
+// import http from '@/util/http'
 import BetterScroll from 'better-scroll'
 export default {
   data () {
@@ -33,15 +33,19 @@ export default {
     }
   },
   mounted () {
-    http({
-      url: '/gateway?cityId=310100&ticketFlag=1&k=3581310',
-      headers: {
-        'X-Host': 'mall.film-ticket.cinema.list'
-      }
-    }).then(res => {
-    //   console.log(res.data.data.cinemas)
-      this.cinemaList = res.data.data.cinemas
-
+    // 分发
+    if (this.$store.state.cinemaList.length === 0) {
+      this.$store.dispatch('getCinemaData', this.$store.state.cityId).then(res => {
+        this.$nextTick(() => {
+          new BetterScroll('.box', {
+            scrollbar: {
+              fade: true
+            }
+          })
+        })
+      })
+    } else {
+      console.log('缓存')
       this.$nextTick(() => {
         new BetterScroll('.box', {
           scrollbar: {
@@ -49,7 +53,35 @@ export default {
           }
         })
       })
-    })
+    }
+
+    // http({
+    //   url: `/gateway?cityId=${this.$store.state.cityId}&ticketFlag=1&k=3581310`,
+    //   headers: {
+    //     'X-Host': 'mall.film-ticket.cinema.list'
+    //   }
+    // }).then(res => {
+    // //   console.log(res.data.data.cinemas)
+    //   this.cinemaList = res.data.data.cinemas
+
+    //   this.$nextTick(() => {
+    //     new BetterScroll('.box', {
+    //       scrollbar: {
+    //         fade: true
+    //       }
+    //     })
+    //   })
+    // })
+  },
+  methods: {
+    handleLeft () {
+      this.$router.push('/city')
+      // 清空cinemaList
+      this.$store.commit('clearCinema')
+    },
+    handleRight () {
+      this.$router.push('/cinemas/search')
+    }
   }
 }
 </script>
