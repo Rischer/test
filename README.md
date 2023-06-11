@@ -1,5 +1,7 @@
 # vue-demo
 
+预览地址：https://rischer.github.io/vue-demo/
+
 ## Project setup
 ```
 npm install
