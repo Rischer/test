@@ -2,7 +2,7 @@
     <div>
         <van-nav-bar title="影院" @click-left="handleLeft" @click-right="handleRight">
           <template #left>
-            {{$store.state.cityName}}<van-icon name="arrow-down" color="#000"/>
+            {{cityName}}<van-icon name="arrow-down" color="#000"/>
           </template>
           <template #right>
             <van-icon name="search" size="22" color="#000"/>
@@ -10,7 +10,7 @@
         </van-nav-bar>
         <div class="box">
             <ul>
-                <li v-for="data in $store.state.cinemaList" :key="data.cinemaId">
+                <li v-for="data in cinemaList" :key="data.cinemaId">
                     <div class="left">
                         <div class="cinema_name">{{data.name}}</div>
                         <div class="cinema_text">{{data.address}}</div>
@@ -26,16 +26,20 @@
 <script>
 // import http from '@/util/http'
 import BetterScroll from 'better-scroll'
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      cinemaList: []
+
     }
+  },
+  computed: {
+    ...mapState(['cinemaList', 'cityId', 'cityName'])
   },
   mounted () {
     // 分发
-    if (this.$store.state.cinemaList.length === 0) {
-      this.$store.dispatch('getCinemaData', this.$store.state.cityId).then(res => {
+    if (this.cinemaList.length === 0) {
+      this.getCinemaData(this.cityId).then(res => {
         this.$nextTick(() => {
           new BetterScroll('.box', {
             scrollbar: {
@@ -74,10 +78,12 @@ export default {
     // })
   },
   methods: {
+    ...mapActions(['getCinemaData']),
+    ...mapMutations(['clearCinema']),
     handleLeft () {
       this.$router.push('/city')
       // 清空cinemaList
-      this.$store.commit('clearCinema')
+      this.clearCinema()
     },
     handleRight () {
       this.$router.push('/cinemas/search')

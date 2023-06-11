@@ -11,7 +11,9 @@
 <script>
 import http from '@/util/http'
 import { Toast } from 'vant'
+import obj from '@/util/mixinObj'
 export default {
+  mixins: [obj], // 混入
   data () {
     return {
       cityList: []
@@ -22,7 +24,11 @@ export default {
       return this.cityList.map(item => item.type)
     }
   },
+  destroyed () {
+    this.$store.commit('show')
+  },
   mounted () {
+    this.$store.commit('hide')
     http({
       url: '/gateway?k=3080741',
       headers: {

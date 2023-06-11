@@ -70,6 +70,7 @@
 <script>
 // import axios from 'axios'
 import http from '@/util/http'
+import obj from '@/util/mixinObj'
 import moment from 'moment'
 import Vue from 'vue'
 import detailSwiper from '@/components/detail/DetailSwiper'
@@ -102,6 +103,7 @@ Vue.directive('scroll', {
   }
 })
 export default {
+  mixins: [obj],
   data () {
     return {
       filmInfo: null,
@@ -113,7 +115,7 @@ export default {
     detailSwiperItem,
     detailHeader
   },
-  created () {
+  mounted () {
     // 匹配当前路由
     console.log('created', this.$route.params.id)
 
