@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkvue_demo"]=self["webpackChunkvue_demo"]||[]).push([[806],{5806:function(u,e,n){n.r(e),n.d(e,{default:function(){return f}});var t=function(){var u=this,e=u._self._c;return e("div",[e("van-button",{attrs:{type:"primary"}},[u._v("主要按钮")])],1)},r=[],l={},s=l,a=n(1001),c=(0,a.Z)(s,t,r,!1,null,null,null),f=c.exports}}]);
+//# sourceMappingURL=806.13805d5c.js.map
